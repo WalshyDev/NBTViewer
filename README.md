@@ -14,3 +14,5 @@ Example: `java -jar NBTViewer.jar -v test.dat`
 
 ## GUI
 To use the GUI simply open the jar file and then File > Open File
+
+> :warning: Be careful opening large files with the GUI! JFX doesn't handle inserting thousands of lines very well.

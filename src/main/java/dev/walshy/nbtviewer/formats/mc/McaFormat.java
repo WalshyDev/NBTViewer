@@ -1,20 +1,14 @@
-package dev.walshy.nbtviewer.formats;
+package dev.walshy.nbtviewer.formats.mc;
 
-import dev.walshy.nbtviewer.CompressionType;
 import dev.walshy.nbtviewer.NBTViewer;
+import dev.walshy.nbtviewer.formats.Format;
 import dev.walshy.nbtviewer.utils.IntPair;
 import org.projectender.nbt.NBTUtils;
-import org.projectender.nbt.exception.NBTException;
 import org.projectender.nbt.tag.Tag;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -36,7 +30,7 @@ public class McaFormat implements Format {
         }
 
         return tags.entrySet().stream()
-            .map(entry -> "Chunk " + entry.getKey().getX() + "," + entry.getKey().getZ()
+            .map(entry -> "-- Chunk [" + entry.getKey().getX() + "," + entry.getKey().getZ() + "]"
                 + "\n" + NBTUtils.toString(entry.getValue(), verbose))
             .collect(Collectors.joining("\n\n"));
     }

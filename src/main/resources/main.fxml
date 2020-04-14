@@ -14,11 +14,12 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem fx:id="openFile" mnemonicParsing="false" onAction="#onOpenFileClicked" text="Open File" />
+                  <MenuItem fx:id="saveFIle" mnemonicParsing="false" onAction="#onSaveFileClicked" text="Save File" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea fx:id="result" editable="false" layoutY="30.0" prefHeight="370.0" prefWidth="600.0" wrapText="true">
+      <TextArea fx:id="result" editable="false" layoutY="30.0" prefHeight="370.0" prefWidth="600.0" text="^ Open a file!" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>

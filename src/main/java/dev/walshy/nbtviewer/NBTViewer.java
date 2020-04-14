@@ -2,7 +2,7 @@ package dev.walshy.nbtviewer;
 
 import com.github.luben.zstd.ZstdInputStream;
 import dev.walshy.nbtviewer.formats.Format;
-import dev.walshy.nbtviewer.formats.McaFormat;
+import dev.walshy.nbtviewer.formats.mc.McaFormat;
 import org.projectender.nbt.NBTUtils;
 import org.projectender.nbt.exception.NBTException;
 import org.projectender.nbt.tag.Tag;
@@ -57,43 +57,40 @@ public class NBTViewer {
         }
 
         System.out.println("Running GUI");
-        GUI.launch();
+        GUI.run();
     }
 
     protected void readFile(File f) {
-        System.out.println("File size: " + f.length() + " bytes");
+        new Thread(() -> {
+            final String extension = f.getName().substring(f.getName().lastIndexOf('.') + 1);
+            for (Format format : formats) {
+                if (format.fileExtension().equals(extension)) {
+                    printOutput("Loading...");
+                    final String output = format.handle(f, verbose);
+                    if (output != null)
+                        printOutput(output);
+                    return;
+                }
+            }
 
-        final String extension = f.getName().substring(f.getName().lastIndexOf('.') + 1);
-        for (Format format : formats) {
-            if (format.fileExtension().equals(extension)) {
-                Tag tag = format.handle(f);
-                System.out.println("Verbose: " + verbose);
-                if (tag == null) {
-                    printOutput("ERROR: Failed to read NBT file, if it is not a Minecraft region file (Anvil format) " +
-                        "then rename and try again");
-                } else
-                    printOutput(NBTUtils.toString(tag, verbose));
+            final DataInputStream stream = getStream(f);
+            if (stream == null) {
+                printOutput("Failed to read file!!");
                 return;
             }
-        }
 
-        final DataInputStream stream = getStream(f);
-        if (stream == null) {
-            printOutput("Failed to read file!!");
-            return;
-        }
-
-        try {
-            printOutput(NBTUtils.toString(Tag.readTag(stream), verbose));
-            stream.close();
-        } catch (NBTException | IOException e) {
-            printOutput(e);
-        }
+            try {
+                printOutput("Loading...");
+                printOutput(NBTUtils.toString(Tag.readTag(stream), verbose));
+                stream.close();
+            } catch (NBTException | IOException e) {
+                printOutput(e);
+            }
+        }).start();
     }
 
     private DataInputStream getStream(File f) {
         final CompressionType type = CompressionType.getType(f);
-        System.out.println("Using compression type: " + type);
         if (type == null) return null;
 
         try {

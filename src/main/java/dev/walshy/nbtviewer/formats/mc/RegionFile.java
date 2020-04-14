@@ -1,4 +1,4 @@
-package dev.walshy.nbtviewer.formats;
+package dev.walshy.nbtviewer.formats.mc;
 
 import dev.walshy.nbtviewer.CompressionType;
 
